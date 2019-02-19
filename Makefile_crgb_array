@@ -1,0 +1,33 @@
+CFLAGS=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra -O1 $(debug)
+#-ggdb
+#-pg for profiling 
+
+INCLUDEDIR=-I./../collections/array -I.
+
+CRGB_ARRAY_SRC=crgb_array.c
+
+CRGB_ARRAY_LIBNAME=libcrgb_array.a
+CRGB_ARRAY_OBJS=crgb_array.o
+
+CRGB_ARRAY_TESTSRC=test_crgb_array.c
+CRGB_ARRAY_TESTBIN=test_crgb_array.exe
+CRGB_ARRAY_TESTLIB=-larray -lcrgb_array -lcolor 
+CRGB_ARRAY_TESTLIBDIR=-L./../collections/array/$(BUILDDIR) -L$(BUILDDIR) 
+
+all:  $(BUILDPATH)$(CRGB_ARRAY_LIBNAME) $(BUILDPATH)$(CRGB_ARRAY_TESTBIN) test
+	
+$(BUILDPATH)$(CRGB_ARRAY_LIBNAME): $(BUILDPATH)$(CRGB_ARRAY_OBJS)
+	$(AR) $(ARFLAGS) $(BUILDPATH)$(CRGB_ARRAY_LIBNAME) $(BUILDPATH)$(CRGB_ARRAY_OBJS)
+
+$(BUILDPATH)$(CRGB_ARRAY_OBJS):
+	$(CC) $(CFLAGS) -c $(CRGB_ARRAY_SRC) -o $(BUILDPATH)$(CRGB_ARRAY_OBJS) $(INCLUDEDIR) 
+	
+$(BUILDPATH)$(CRGB_ARRAY_TESTBIN):
+	$(CC) $(CFLAGS) $(CRGB_ARRAY_TESTSRC) -o $(BUILDPATH)$(CRGB_ARRAY_TESTBIN) $(INCLUDEDIR) $(CRGB_ARRAY_TESTLIBDIR) $(CRGB_ARRAY_TESTLIB)
+	
+.PHONY: test
+
+test:
+	./$(BUILDPATH)$(CRGB_ARRAY_TESTBIN)
+
+	

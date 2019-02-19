@@ -1,0 +1,45 @@
+CFLAGS=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra -O1 $(debug)
+#-ggdb
+#-pg for profiling 
+
+INCLUDEDIR=-I./../collections/array -I.
+
+SRC=color.c
+
+LIBNAME=libcolor.a
+OBJS=color.o
+
+TESTSRC=test_color.c
+TESTBIN=test_color.exe
+TESTLIB=-lcolor
+TESTLIBDIR=-L$(BUILDDIR)
+
+COLOR_T_TESTSRC=test_color_t.c
+COLOR_T_TESTBIN=test_color_t.exe
+COLOR_T_TESTLIB=-lcolor 
+COLOR_T_TESTLIBDIR=-L$(BUILDDIR) 
+
+all: $(BUILDPATH)$(LIBNAME) $(BUILDPATH)$(TESTBIN) $(BUILDPATH)$(COLOR_T_TESTBIN) \
+	 test_color test_color_t
+
+$(BUILDPATH)$(LIBNAME): $(BUILDPATH)$(OBJS)
+	$(AR) $(ARFLAGS) $(BUILDPATH)$(LIBNAME) $(BUILDPATH)$(OBJS)
+
+$(BUILDPATH)$(OBJS): color.h
+	$(CC) $(CFLAGS) -c $(SRC) -o $(BUILDPATH)$(OBJS) $(INCLUDEDIR)
+	
+$(BUILDPATH)$(TESTBIN):
+	$(CC) $(CFLAGS) $(TESTSRC) -o $(BUILDPATH)$(TESTBIN) $(INCLUDEDIR) $(TESTLIBDIR) $(TESTLIB)
+	
+$(BUILDPATH)$(COLOR_T_TESTBIN):
+	$(CC) $(CFLAGS) $(COLOR_T_TESTSRC) -o $(BUILDPATH)$(COLOR_T_TESTBIN) $(INCLUDEDIR) $(COLOR_T_TESTLIBDIR) $(COLOR_T_TESTLIB)
+	
+.PHONY: test_color test_color_t
+
+test_color:
+	./$(BUILDPATH)$(TESTBIN)
+
+test_color_t:
+	./$(BUILDPATH)$(COLOR_T_TESTBIN)
+
+
