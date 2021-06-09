@@ -1,8 +1,49 @@
+#MAKE?=mingw32-make
+AR?=ar
+ARFLAGS?=rcs
+PATHSEP?=/
+CC=gcc
+BUILDROOT?=build
+
+ifeq ($(CLANG),1)
+	export CC=clang
+endif
+
+BUILDDIR?=$(BUILDROOT)$(PATHSEP)$(CC)
+BUILDPATH?=$(BUILDDIR)$(PATHSEP)
+
+INSTALL_ROOT?=$(BUILDPATH)
+
+ifeq ($(DEBUG),1)
+	export debug=-ggdb -Ddebug=1
+	export isdebug=1
+endif
+
+ifeq ($(ANALYSIS),1)
+	export analysis=-Danalysis=1
+	export isanalysis=1
+endif
+
+ifeq ($(DEBUG),2)
+	export debug=-ggdb -Ddebug=2
+	export isdebug=1
+endif
+
+ifeq ($(DEBUG),3)
+	export debug=-ggdb -Ddebug=3
+	export isdebug=1
+endif
+
+ifeq ($(OUTPUT),1)
+	export outimg= -Doutput=1
+endif
+
 CFLAGS=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra -O1 $(debug)
 #-ggdb
 #-pg for profiling 
 
-INCLUDEDIR=-I./../collections/array -I.
+LIB?=-L/c/dev/lib
+INCLUDE?=-I/c/dev/include
 
 CRGB_ARRAY_SRC=crgb_array.c
 
@@ -12,7 +53,7 @@ CRGB_ARRAY_OBJS=crgb_array.o
 CRGB_ARRAY_TESTSRC=test_crgb_array.c
 CRGB_ARRAY_TESTBIN=test_crgb_array.exe
 CRGB_ARRAY_TESTLIB=-larray -lcrgb_array -lcolor 
-CRGB_ARRAY_TESTLIBDIR=-L./../collections/array/$(BUILDDIR) -L$(BUILDDIR) 
+CRGB_ARRAY_TESTLIBDIR=$(LIB) -L$(BUILDDIR) 
 
 all:  $(BUILDPATH)$(CRGB_ARRAY_LIBNAME) $(BUILDPATH)$(CRGB_ARRAY_TESTBIN) test
 	
@@ -20,14 +61,20 @@ $(BUILDPATH)$(CRGB_ARRAY_LIBNAME): $(BUILDPATH)$(CRGB_ARRAY_OBJS)
 	$(AR) $(ARFLAGS) $(BUILDPATH)$(CRGB_ARRAY_LIBNAME) $(BUILDPATH)$(CRGB_ARRAY_OBJS)
 
 $(BUILDPATH)$(CRGB_ARRAY_OBJS):
-	$(CC) $(CFLAGS) -c $(CRGB_ARRAY_SRC) -o $(BUILDPATH)$(CRGB_ARRAY_OBJS) $(INCLUDEDIR) 
+	$(CC) $(CFLAGS) -c $(CRGB_ARRAY_SRC) -o $(BUILDPATH)$(CRGB_ARRAY_OBJS) $(INCLUDE) 
 	
 $(BUILDPATH)$(CRGB_ARRAY_TESTBIN):
-	$(CC) $(CFLAGS) $(CRGB_ARRAY_TESTSRC) -o $(BUILDPATH)$(CRGB_ARRAY_TESTBIN) $(INCLUDEDIR) $(CRGB_ARRAY_TESTLIBDIR) $(CRGB_ARRAY_TESTLIB)
+	$(CC) $(CFLAGS) $(CRGB_ARRAY_TESTSRC) -o $(BUILDPATH)$(CRGB_ARRAY_TESTBIN) $(INCLUDE) $(CRGB_ARRAY_TESTLIBDIR) $(CRGB_ARRAY_TESTLIB)
 	
 .PHONY: test
 
 test:
 	./$(BUILDPATH)$(CRGB_ARRAY_TESTBIN)
+
+install:
+	mkdir -p $(INSTALL_ROOT)include
+	mkdir -p $(INSTALL_ROOT)lib
+	cp ./crgb_array.h $(INSTALL_ROOT)include/crgb_array.h
+	cp $(BUILDPATH)$(CRGB_ARRAY_LIBNAME) $(INSTALL_ROOT)lib/$(CRGB_ARRAY_LIBNAME)
 
 	
