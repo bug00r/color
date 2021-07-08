@@ -38,11 +38,18 @@ ifeq ($(OUTPUT),1)
 	export outimg= -Doutput=1
 endif
 
-CFLAGS=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra -O1 $(debug)
+BIT_SUFFIX=
+
+ifeq ($(M32),1)
+	CFLAGS+=-m32
+	BIT_SUFFIX+=32
+endif
+
+CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra $(debug)
 #-ggdb
 #-pg for profiling 
 
-LIB?=-L/c/dev/lib
+LIB?=-L/c/dev/lib$(BIT_SUFFIX)
 INCLUDE?=-I/c/dev/include
 
 CRGB_ARRAY_SRC=crgb_array.c
@@ -55,7 +62,7 @@ CRGB_ARRAY_TESTBIN=test_crgb_array.exe
 CRGB_ARRAY_TESTLIB=-larray -lcrgb_array -lcolor 
 CRGB_ARRAY_TESTLIBDIR=$(LIB) -L$(BUILDDIR) 
 
-all:  $(BUILDPATH)$(CRGB_ARRAY_LIBNAME) $(BUILDPATH)$(CRGB_ARRAY_TESTBIN) test
+all:  $(BUILDPATH)$(CRGB_ARRAY_LIBNAME) $(BUILDPATH)$(CRGB_ARRAY_TESTBIN)
 	
 $(BUILDPATH)$(CRGB_ARRAY_LIBNAME): $(BUILDPATH)$(CRGB_ARRAY_OBJS)
 	$(AR) $(ARFLAGS) $(BUILDPATH)$(CRGB_ARRAY_LIBNAME) $(BUILDPATH)$(CRGB_ARRAY_OBJS)
@@ -65,16 +72,14 @@ $(BUILDPATH)$(CRGB_ARRAY_OBJS):
 	
 $(BUILDPATH)$(CRGB_ARRAY_TESTBIN):
 	$(CC) $(CFLAGS) $(CRGB_ARRAY_TESTSRC) -o $(BUILDPATH)$(CRGB_ARRAY_TESTBIN) $(INCLUDE) $(CRGB_ARRAY_TESTLIBDIR) $(CRGB_ARRAY_TESTLIB)
-	
-.PHONY: test
 
 test:
 	./$(BUILDPATH)$(CRGB_ARRAY_TESTBIN)
 
 install:
 	mkdir -p $(INSTALL_ROOT)include
-	mkdir -p $(INSTALL_ROOT)lib
+	mkdir -p $(INSTALL_ROOT)lib$(BIT_SUFFIX)
 	cp ./crgb_array.h $(INSTALL_ROOT)include/crgb_array.h
-	cp $(BUILDPATH)$(CRGB_ARRAY_LIBNAME) $(INSTALL_ROOT)lib/$(CRGB_ARRAY_LIBNAME)
+	cp $(BUILDPATH)$(CRGB_ARRAY_LIBNAME) $(INSTALL_ROOT)lib$(BIT_SUFFIX)/$(CRGB_ARRAY_LIBNAME)
 
 	
