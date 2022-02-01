@@ -20,7 +20,11 @@ install:
 	$(MAKE) -f Makefile_color install
 	$(MAKE) -f Makefile_crgb_array install
 
-.PHONY: clean install 
+test:
+	$(MAKE) -f Makefile_color test
+	$(MAKE) -f Makefile_crgb_array test
+
+.PHONY: clean install test
 
 createdir:
 	mkdir -p $(BUILDDIR)
