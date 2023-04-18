@@ -1,44 +1,27 @@
-#MAKE?=mingw32-make
-AR?=ar
 ARFLAGS?=rcs
 PATHSEP?=/
-CC=gcc
 BUILDROOT?=build
-
-ifeq ($(CLANG),1)
-	export CC=clang
-endif
 
 BUILDDIR?=$(BUILDROOT)$(PATHSEP)$(CC)
 BUILDPATH?=$(BUILDDIR)$(PATHSEP)
 
-INSTALL_ROOT?=$(BUILDPATH)
-
-ifeq ($(DEBUG),1)
-	export debug=-ggdb -Ddebug=1
-	export isdebug=1
+ifndef PREFIX
+	INSTALL_ROOT=$(BUILDPATH)
+else
+	INSTALL_ROOT=$(PREFIX)$(PATHSEP)
+	ifeq ($(INSTALL_ROOT),/)
+	INSTALL_ROOT=$(BUILDPATH)
+	endif
 endif
 
-ifeq ($(ANALYSIS),1)
-	export analysis=-Danalysis=1
-	export isanalysis=1
+ifdef DEBUG
+	CFLAGS+=-ggdb
+	ifeq ($(DEBUG),)
+	CFLAGS+=-Ddebug=1
+	else 
+	CFLAGS+=-Ddebug=$(DEBUG)
+	endif
 endif
-
-ifeq ($(DEBUG),2)
-	export debug=-ggdb -Ddebug=2
-	export isdebug=1
-endif
-
-ifeq ($(DEBUG),3)
-	export debug=-ggdb -Ddebug=3
-	export isdebug=1
-endif
-
-ifeq ($(OUTPUT),1)
-	export outimg= -Doutput=1
-endif
-
-BIT_SUFFIX=
 
 ifeq ($(M32),1)
 	CFLAGS+=-m32
@@ -46,12 +29,10 @@ ifeq ($(M32),1)
 endif
 
 CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
-
 #-ggdb
 #-pg for profiling 
 
-LIB?=-L/c/dev/lib$(BIT_SUFFIX)
-INCLUDE?=-I/c/dev/include/
+CFLAGS+=-I/c/dev/include/
 
 NAME=color
 
@@ -66,30 +47,38 @@ TESTBIN=$(BUILDPATH)test_$(NAME).exe
 TESTLIB=-l$(NAME)
 TESTLIBDIR=-L$(BUILDDIR)
 
+LDFLAGS+=$(TESTLIBDIR) $(TESTLIB)
+
 COLOR_T_TESTSRC=test_$(NAME)_t.c
 COLOR_T_TESTBIN=$(BUILDPATH)test_$(NAME)_t.exe
 COLOR_T_TESTLIB=-l$(NAME) 
 COLOR_T_TESTLIBDIR=-L$(BUILDDIR) 
 
-all: $(LIB) $(TESTBIN) $(COLOR_T_TESTBIN)
+all: createdir $(LIB)
 
 $(LIB): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $^
 
 $(OBJS): $(NAME).h
-	$(CC) $(CFLAGS) -c $(SRC) -o $@ $(INCLUDEDIR)
+	$(CC) $(CFLAGS) -c $(SRC) -o $@
 	
-$(TESTBIN):
-	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(INCLUDEDIR) $(TESTLIBDIR) $(TESTLIB)
+$(TESTBIN): $(LIB)
+	$(CC) $(CFLAGS) $(TESTSRC) -o $@ $(LDFLAGS)
 	
-$(COLOR_T_TESTBIN):
-	$(CC) $(CFLAGS) $(COLOR_T_TESTSRC) -o $@ $(INCLUDEDIR) $(COLOR_T_TESTLIBDIR) $(COLOR_T_TESTLIB)
+$(COLOR_T_TESTBIN): $(LIB)
+	$(CC) $(CFLAGS) $(COLOR_T_TESTSRC) -o $@ $(LDFLAGS)
 
-.PHONY: test
+.PHONY: clean test createdir
 
-test:
+test: createdir $(TESTBIN) $(COLOR_T_TESTBIN)
 	./$(COLOR_T_TESTBIN)
 	./$(TESTBIN)
+
+createdir:
+	mkdir -p $(BUILDDIR)
+
+clean:
+	-rm -dr $(BUILDROOT)
 
 install:
 	mkdir -p $(INSTALL_ROOT)include

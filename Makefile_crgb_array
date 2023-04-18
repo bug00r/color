@@ -1,56 +1,39 @@
-#MAKE?=mingw32-make
-AR?=ar
 ARFLAGS?=rcs
 PATHSEP?=/
-CC=gcc
 BUILDROOT?=build
-
-ifeq ($(CLANG),1)
-	export CC=clang
-endif
 
 BUILDDIR?=$(BUILDROOT)$(PATHSEP)$(CC)
 BUILDPATH?=$(BUILDDIR)$(PATHSEP)
 
-INSTALL_ROOT?=$(BUILDPATH)
-
-ifeq ($(DEBUG),1)
-	export debug=-ggdb -Ddebug=1
-	export isdebug=1
+ifndef PREFIX
+	INSTALL_ROOT=$(BUILDPATH)
+else
+	INSTALL_ROOT=$(PREFIX)$(PATHSEP)
+	ifeq ($(INSTALL_ROOT),/)
+	INSTALL_ROOT=$(BUILDPATH)
+	endif
 endif
 
-ifeq ($(ANALYSIS),1)
-	export analysis=-Danalysis=1
-	export isanalysis=1
+ifdef DEBUG
+	CFLAGS+=-ggdb
+	ifeq ($(DEBUG),)
+	CFLAGS+=-Ddebug=1
+	else 
+	CFLAGS+=-Ddebug=$(DEBUG)
+	endif
 endif
-
-ifeq ($(DEBUG),2)
-	export debug=-ggdb -Ddebug=2
-	export isdebug=1
-endif
-
-ifeq ($(DEBUG),3)
-	export debug=-ggdb -Ddebug=3
-	export isdebug=1
-endif
-
-ifeq ($(OUTPUT),1)
-	export outimg= -Doutput=1
-endif
-
-BIT_SUFFIX=
 
 ifeq ($(M32),1)
 	CFLAGS+=-m32
 	BIT_SUFFIX+=32
 endif
 
-CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra $(debug)
+CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
 #-ggdb
 #-pg for profiling 
 
-LIBDIRS?=-L/c/dev/lib$(BIT_SUFFIX)
-INCLUDE?=-I/c/dev/include
+LDFLAGS+=-L/c/dev/lib$(BIT_SUFFIX)
+CFLAGS+=-I/c/dev/include
 
 NAME=crgb_array
 
@@ -65,19 +48,27 @@ CRGB_ARRAY_TESTBIN=$(BUILDPATH)test_$(NAME).exe
 CRGB_ARRAY_TESTLIB=-larray -l$(NAME) -lcolor 
 CRGB_ARRAY_TESTLIBDIR=$(LIBDIRS) -L$(BUILDDIR) 
 
-all: $(LIB) $(CRGB_ARRAY_TESTBIN)
+LDFLAGS+=$(CRGB_ARRAY_TESTLIBDIR) $(CRGB_ARRAY_TESTLIB)
+
+all: createdir $(LIB)
 	
 $(LIB): $(CRGB_ARRAY_OBJS)
 	$(AR) $(ARFLAGS) $@ $^
 
 $(CRGB_ARRAY_OBJS):
-	$(CC) $(CFLAGS) -c $(CRGB_ARRAY_SRC) -o $@ $(INCLUDE) 
+	$(CC) $(CFLAGS) -c $(CRGB_ARRAY_SRC) -o $@ 
 	
 $(CRGB_ARRAY_TESTBIN): $(LIB)
-	$(CC) $(CFLAGS) $(CRGB_ARRAY_TESTSRC) -o $@ $(INCLUDE) $(CRGB_ARRAY_TESTLIBDIR) $(CRGB_ARRAY_TESTLIB)
+	$(CC) $(CFLAGS) $(CRGB_ARRAY_TESTSRC) -o $@ $(LDFLAGS)
 
-test:
+test: createdir $(CRGB_ARRAY_TESTBIN)
 	./$(CRGB_ARRAY_TESTBIN)
+
+createdir:
+	mkdir -p $(BUILDDIR)
+
+clean:
+	-rm -dr $(BUILDROOT)
 
 install:
 	mkdir -p $(INSTALL_ROOT)include

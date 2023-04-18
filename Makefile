@@ -1,18 +1,4 @@
-#MAKE?=mingw32-make
-AR?=ar
-ARFLAGS?=rcs
-PATHSEP?=/
-CC=gcc
-BUILDROOT?=build
-
-BUILDDIR?=$(BUILDROOT)$(PATHSEP)$(CC)
-BUILDPATH?=$(BUILDDIR)$(PATHSEP)
-
-ifeq ($(CLANG),1)
-	export CC=clang
-endif
-
-all: createdir
+all: 
 	$(MAKE) -f Makefile_color
 	$(MAKE) -f Makefile_crgb_array
 
@@ -24,10 +10,8 @@ test:
 	$(MAKE) -f Makefile_color test
 	$(MAKE) -f Makefile_crgb_array test
 
-.PHONY: clean install test
-
-createdir:
-	mkdir -p $(BUILDDIR)
-
 clean:
-	-rm -dr $(BUILDROOT)
+	$(MAKE) -f Makefile_color clean
+	$(MAKE) -f Makefile_crgb_array clean
+
+.PHONY: clean install test
