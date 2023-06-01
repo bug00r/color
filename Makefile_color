@@ -33,11 +33,11 @@ ifeq ($(M32),1)
 	BIT_SUFFIX+=32
 endif
 
-CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
+override CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
 #-ggdb
 #-pg for profiling 
 
-CFLAGS+=-I/c/dev/include/
+override CFLAGS+=-I/c/dev/include/
 
 NAME=color
 
@@ -52,7 +52,7 @@ TESTBIN=$(BUILDPATH)test_$(NAME).exe
 TESTLIB=-l$(NAME)
 TESTLIBDIR=-L$(BUILDDIR)
 
-LDFLAGS+=$(TESTLIBDIR) $(TESTLIB)
+override LDFLAGS+=$(TESTLIBDIR) $(TESTLIB)
 
 COLOR_T_TESTSRC=test_$(NAME)_t.c
 COLOR_T_TESTBIN=$(BUILDPATH)test_$(NAME)_t.exe

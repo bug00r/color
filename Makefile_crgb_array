@@ -33,12 +33,12 @@ ifeq ($(M32),1)
 	BIT_SUFFIX+=32
 endif
 
-CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
+override CFLAGS+=-std=c11 -Wpedantic -pedantic-errors -Wall -Wextra
 #-ggdb
 #-pg for profiling 
 
-LDFLAGS+=-L/c/dev/lib$(BIT_SUFFIX)
-CFLAGS+=-I/c/dev/include
+override LDFLAGS+=-L/c/dev/lib$(BIT_SUFFIX)
+override CFLAGS+=-I/c/dev/include
 
 NAME=crgb_array
 
@@ -53,7 +53,7 @@ CRGB_ARRAY_TESTBIN=$(BUILDPATH)test_$(NAME).exe
 CRGB_ARRAY_TESTLIB=-larray -l$(NAME) -lcolor 
 CRGB_ARRAY_TESTLIBDIR=$(LIBDIRS) -L$(BUILDDIR) 
 
-LDFLAGS+=$(CRGB_ARRAY_TESTLIBDIR) $(CRGB_ARRAY_TESTLIB)
+override LDFLAGS+=$(CRGB_ARRAY_TESTLIBDIR) $(CRGB_ARRAY_TESTLIB)
 
 all: createdir $(LIB)
 	
