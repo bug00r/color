@@ -19,6 +19,20 @@ crgb_crgb_copy(cRGB_t *  color, const cRGB_t *  color2) {
 }
 
 void 
+crgb_crgb_set(cRGB_t *color, const float r, const float g, const float b) {
+	color->r = r;
+	color->g = g;
+	color->b = b;
+}
+
+void 
+crgb_crgb_set_ptr(cRGB_t *color, const float *r, const float *g, const float *b) {
+	color->r = *r;
+	color->g = *g;
+	color->b = *b;
+}
+
+void 
 crgb_crgb_add(cRGB_t *  color, const cRGB_t *  color2) {
 	color->r += color2->r;
 	color->g += color2->g;

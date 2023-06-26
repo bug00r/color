@@ -69,7 +69,9 @@ cRGB_t * create_crgb( const float r, const float g, const float b);
 	*/
 #endif
 void crgb_crgb_copy(cRGB_t *  color, const cRGB_t *  color2);
-//no need for color_t its only  color2 = color1
+void crgb_crgb_set(cRGB_t *  color, const float r, const float g, const float b);
+void crgb_crgb_set_ptr(cRGB_t *  color, const float *r, const float *g, const float *b);
+
 
 #if 0
 	/**
