@@ -5,114 +5,114 @@
 
 void 
 assoc_crgb_value(void *  array_entry, int newidx ,void *  init_value){
-	crgb_crgb_copy(((cRGB_t*)array_entry+newidx), ((cRGB_t*)init_value));
+	crgb_crgb_copy(((ColorRGB*)array_entry+newidx), ((ColorRGB*)init_value));
 }
 
 void 
 assoc_crgb_ref(void *  array_entry, int newidx ,void *  init_value){
-	*((cRGB_t **)array_entry+newidx) = ((cRGB_t *)init_value);
+	*((ColorRGB **)array_entry+newidx) = ((ColorRGB *)init_value);
 }
 
-array_t * 
+Array * 
 crgb_array_new(int cnt_i){
-	return array1D_new(cnt_i, sizeof(cRGB_t));
+	return array1D_new(cnt_i, sizeof(ColorRGB));
 }
 
-array_t * 
+Array * 
 crgb_array2D_new(int cnt_i, int cnt_j){
-	return array2D_new(cnt_i, cnt_j, sizeof(cRGB_t));
+	return array2D_new(cnt_i, cnt_j, sizeof(ColorRGB));
 }
 
 void 
-crgb_array_init(array_t *  array, cRGB_t *  init_value){
+crgb_array_init(Array *  array, ColorRGB *  init_value){
 	array_init(array, init_value, assoc_crgb_value);
 }
 
-array_error_t 
-crgb_array_get(array_t *  array, int index, cRGB_t *  result){
+ArrayError 
+crgb_array_get(Array *  array, int index, ColorRGB *  result){
 	return array_get(array, index, assoc_crgb_value, result);
 }
 
-array_error_t 
-crgb_array2D_get(array_t *  array, int i, int j, cRGB_t *  result){
+ArrayError 
+crgb_array2D_get(Array *  array, int i, int j, ColorRGB *  result){
 	return array2D_get(array, i, j, assoc_crgb_value, result);
 }
 
-array_error_t 
-crgb_array_get_ref(array_t *  array, int index, cRGB_t **  result){
+ArrayError 
+crgb_array_get_ref(Array *  array, int index, ColorRGB **  result){
 	return array_get(array, index, assoc_crgb_ref, result);
 }
 
-array_error_t 
-crgb_array2D_get_ref(array_t *  array, int i, int j, cRGB_t **  result){
+ArrayError 
+crgb_array2D_get_ref(Array *  array, int i, int j, ColorRGB **  result){
 	return array2D_get(array, i, j, assoc_crgb_ref, result);
 }
 
-array_error_t 
-crgb_array_set(array_t *  array, int index, cRGB_t *  value){
+ArrayError 
+crgb_array_set(Array *  array, int index, ColorRGB *  value){
 	return array_set(array, index, value, assoc_crgb_value);
 }
 
-array_error_t 
-crgb_array2D_set(array_t *  array, int i, int j, cRGB_t *  value){
+ArrayError 
+crgb_array2D_set(Array *  array, int i, int j, ColorRGB *  value){
 	return array2D_set(array, i, j, value, assoc_crgb_value);
 }
 
 #if 0
-	//implementation for color_t
+	//implementation for Color
 #endif
 
 void 
 assoc_color_value(void *  array_entry, int newidx ,void *  init_value){
-	*((color_t*)array_entry+newidx) = *((color_t*)init_value);
+	*((Color*)array_entry+newidx) = *((Color*)init_value);
 }
 
 void 
 assoc_color_ref(void *  array_entry, int newidx ,void *  init_value){
-	*((color_t **)array_entry+newidx) = ((color_t *)init_value);
+	*((Color **)array_entry+newidx) = ((Color *)init_value);
 }
 
-array_t * 
+Array * 
 color_array_new(int cnt_i){
-	return array1D_new(cnt_i, sizeof(color_t));
+	return array1D_new(cnt_i, sizeof(Color));
 }
 
-array_t * 
+Array * 
 color_array2D_new(int cnt_i, int cnt_j){
-	return array2D_new(cnt_i, cnt_j, sizeof(color_t));
+	return array2D_new(cnt_i, cnt_j, sizeof(Color));
 }
 
 void 
-color_array_init(array_t *  array, color_t *  init_value){
+color_array_init(Array *  array, Color *  init_value){
 	array_init(array, init_value, assoc_color_value);
 }
 
-array_error_t 
-color_array_get(array_t *  array, int index, color_t *  result){
+ArrayError 
+color_array_get(Array *  array, int index, Color *  result){
 	return array_get(array, index, assoc_color_value, result);
 }
 
-array_error_t 
-color_array2D_get(array_t *  array, int i, int j, color_t *  result){
+ArrayError 
+color_array2D_get(Array *  array, int i, int j, Color *  result){
 	return array2D_get(array, i, j, assoc_color_value, result);
 }
 
-array_error_t 
-color_array_get_ref(array_t *  array, int index, color_t **  result){
+ArrayError 
+color_array_get_ref(Array *  array, int index, Color **  result){
 	return array_get(array, index, assoc_color_ref, result);
 }
 
-array_error_t 
-color_array2D_get_ref(array_t *  array, int i, int j, color_t **  result){
+ArrayError 
+color_array2D_get_ref(Array *  array, int i, int j, Color **  result){
 	return array2D_get(array, i, j, assoc_color_ref, result);
 }
 
-array_error_t 
-color_array_set(array_t *  array, int index, color_t *  value){
+ArrayError 
+color_array_set(Array *  array, int index, Color *  value){
 	return array_set(array, index, value, assoc_color_value);
 }
 
-array_error_t 
-color_array2D_set(array_t *  array, int i, int j, color_t *  value){
+ArrayError 
+color_array2D_set(Array *  array, int i, int j, Color *  value){
 	return array2D_set(array, i, j, value, assoc_color_value);
 }

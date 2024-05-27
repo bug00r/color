@@ -1,10 +1,10 @@
 #include "color.h"
 
-static const size_t cRGB_size = sizeof(cRGB_t);
+static const size_t cRGB_size = sizeof(ColorRGB);
 
-cRGB_t * 
+ColorRGB * 
 create_crgb(const float r, const float g, const float b) {
-	cRGB_t * newcolor = malloc(cRGB_size);
+	ColorRGB * newcolor = malloc(cRGB_size);
 	newcolor->r = r;
 	newcolor->g = g;
 	newcolor->b = b;
@@ -12,42 +12,42 @@ create_crgb(const float r, const float g, const float b) {
 }
 
 void 
-crgb_crgb_copy(cRGB_t *  color, const cRGB_t *  color2) {
+crgb_crgb_copy(ColorRGB *  color, const ColorRGB *  color2) {
 	color->r = color2->r;
 	color->g = color2->g;
 	color->b = color2->b;
 }
 
 void 
-crgb_crgb_set(cRGB_t *color, const float r, const float g, const float b) {
+crgb_crgb_set(ColorRGB *color, const float r, const float g, const float b) {
 	color->r = r;
 	color->g = g;
 	color->b = b;
 }
 
 void 
-crgb_crgb_set_ptr(cRGB_t *color, const float *r, const float *g, const float *b) {
+crgb_crgb_set_ptr(ColorRGB *color, const float *r, const float *g, const float *b) {
 	color->r = *r;
 	color->g = *g;
 	color->b = *b;
 }
 
 void 
-crgb_crgb_add(cRGB_t *  color, const cRGB_t *  color2) {
+crgb_crgb_add(ColorRGB *  color, const ColorRGB *  color2) {
 	color->r += color2->r;
 	color->g += color2->g;
 	color->b += color2->b;
 }
 
 void 
-crgb_add(cRGB_t *  color, const float add) {
+crgb_add(ColorRGB *  color, const float add) {
 	color->r += add;
 	color->g += add;
 	color->b += add;
 }
 
 void 
-color_add(color_t *  color, const int add) {
+color_add(Color *  color, const int add) {
 	*color = COL_CREATE_RGBA( (COL_GET_R(*color) + add), 
 						     (COL_GET_G(*color) + add), 
 							 (COL_GET_B(*color) + add),
@@ -55,7 +55,7 @@ color_add(color_t *  color, const int add) {
 }
 
 void 
-color_add_dest(color_t *  dest, const color_t *  color, const int add) {
+color_add_dest(Color *  dest, const Color *  color, const int add) {
 	*dest = COL_CREATE_RGBA( (COL_GET_R(*color) + add), 
 							(COL_GET_G(*color) + add), 
 							(COL_GET_B(*color) + add),
@@ -63,14 +63,14 @@ color_add_dest(color_t *  dest, const color_t *  color, const int add) {
 }
 
 void 
-crgb_mul(cRGB_t *  color, const float mul) {
+crgb_mul(ColorRGB *  color, const float mul) {
 	color->r *= mul;
 	color->g *= mul;
 	color->b *= mul;
 }
 
 void 
-color_mul(color_t *  color, const int mul) {
+color_mul(Color *  color, const int mul) {
 	*color = COL_CREATE_RGBA( (COL_GET_R(*color) * mul), 
 						     (COL_GET_G(*color) * mul), 
 						     (COL_GET_B(*color) * mul),
@@ -78,7 +78,7 @@ color_mul(color_t *  color, const int mul) {
 }
 
 void 
-color_mul_dest(color_t *  dest, const color_t *  color, const int mul) {
+color_mul_dest(Color *  dest, const Color *  color, const int mul) {
 	*dest = COL_CREATE_RGBA( (COL_GET_R(*color) * mul), 
 						     (COL_GET_G(*color) * mul), 
 						     (COL_GET_B(*color) * mul),
@@ -86,7 +86,7 @@ color_mul_dest(color_t *  dest, const color_t *  color, const int mul) {
 }
 
 void 
-color_mulf(color_t *  color, const float mul) {
+color_mulf(Color *  color, const float mul) {
 	*color = COL_CREATE_RGBA( (int)((float)COL_GET_R(*color) * mul), 
 						      (int)((float)COL_GET_G(*color) * mul), 
 						      (int)((float)COL_GET_B(*color) * mul),
@@ -94,7 +94,7 @@ color_mulf(color_t *  color, const float mul) {
 }
 
 void 
-color_mulf_dest(color_t *  dest, const color_t *  color, const float mul) {
+color_mulf_dest(Color *  dest, const Color *  color, const float mul) {
 	*dest = COL_CREATE_RGBA( (int)((float)COL_GET_R(*color) * mul), 
 						     (int)((float)COL_GET_G(*color) * mul), 
 						     (int)((float)COL_GET_B(*color) * mul),
@@ -102,15 +102,15 @@ color_mulf_dest(color_t *  dest, const color_t *  color, const float mul) {
 }
 
 void 
-crgb_print(const cRGB_t *  color) {
+crgb_print(const ColorRGB *  color) {
 	printf("R,G,B=%f,%f,%f\n", color->r, color->g, color->b);
 }
 
-void color_print(const color_t *  color) {
+void color_print(const Color *  color) {
 	printf("R,G,B,A=%ld,%ld,%ld,%ld\n", COL_GET_R(*color), COL_GET_G(*color), COL_GET_B(*color), COL_GET_A(*color));
 }
 
-void color_truncate(int *  value) {
+void Colorruncate(int *  value) {
 	int * val = value;
 	int _val = *val;
 	if ( _val > 255 ) *val = 255;
@@ -118,14 +118,14 @@ void color_truncate(int *  value) {
 }
 
 void 
-color_brightness_255_dest(color_t *  dest, const color_t *  color, const int brightness) {
+color_brightness_255_dest(Color *  dest, const Color *  color, const int brightness) {
 	*dest = *color;
 	int r = COL_GET_R(*dest) + brightness,
 		g = COL_GET_G(*dest) + brightness,
 		b = COL_GET_B(*dest) + brightness;
-	color_truncate(&r);
-	color_truncate(&g);
-	color_truncate(&b);
+	Colorruncate(&r);
+	Colorruncate(&g);
+	Colorruncate(&b);
 	
 	COL_SET_R(*dest,r);
 	COL_SET_G(*dest,g); 
@@ -140,7 +140,7 @@ void crgb_truncate(float *  value) {
 }
 
 void 
-crgb_brightness_255_dest(cRGB_t *  dest, const cRGB_t *  color, const float brightness) {
+crgb_brightness_255_dest(ColorRGB *  dest, const ColorRGB *  color, const float brightness) {
 	crgb_crgb_copy(dest, color);
 	crgb_add(dest, brightness);
 	crgb_truncate(&dest->r);
@@ -165,7 +165,7 @@ float color_contrast_factor_255(const int contrast) {
 }
 
 void 
-crgb_contrast_255_dest(cRGB_t *  dest, const cRGB_t *  color, const float contrast_factor) {
+crgb_contrast_255_dest(ColorRGB *  dest, const ColorRGB *  color, const float contrast_factor) {
 	crgb_crgb_copy(dest, color);
 	dest->r = (contrast_factor * (dest->r - 128.f)) + 128.f;
 	dest->g = (contrast_factor * (dest->g - 128.f)) + 128.f;
@@ -176,14 +176,14 @@ crgb_contrast_255_dest(cRGB_t *  dest, const cRGB_t *  color, const float contra
 }
 
 void 
-color_contrast_255_dest(color_t *  dest, const color_t *  color, const float contrast_factor) {
+color_contrast_255_dest(Color *  dest, const Color *  color, const float contrast_factor) {
 	*dest = *color;
 	int r = (int)((contrast_factor * ((float)(COL_GET_R(*color)) - 128.f)) + 128.f),
 		g = (int)((contrast_factor * ((float)(COL_GET_G(*color)) - 128.f)) + 128.f),
 		b = (int)((contrast_factor * ((float)(COL_GET_B(*color)) - 128.f)) + 128.f);
-	color_truncate(&r);
-	color_truncate(&g);
-	color_truncate(&b);
+	Colorruncate(&r);
+	Colorruncate(&g);
+	Colorruncate(&b);
 	
 	COL_SET_R(*dest,r);
 	COL_SET_G(*dest,g); 

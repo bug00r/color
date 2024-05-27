@@ -26,7 +26,7 @@
 int 
 main() {
 
-	cRGB_t color = {255.f,255.f,255.f};
+	ColorRGB color = {255.f,255.f,255.f};
 	TEST_COLOR_RGB(color, 255.f,255.f,255.f);		
 
 	color.r = 12.f;
@@ -35,7 +35,7 @@ main() {
 	crgb_add(&color, 8.f);
 	TEST_COLOR_RGB(color, 20.f, 20.f, 20.f);
 	
-	cRGB_t color2 = {0.f,0.f,0.f};
+	ColorRGB color2 = {0.f,0.f,0.f};
 	crgb_crgb_copy(&color2,&color);
 	TEST_COLOR_COLOR(color2, color);
 

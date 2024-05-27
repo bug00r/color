@@ -49,28 +49,28 @@
 #define COL_SET_B(color, b) (color = (COL_TRUNC_B(color) | COL_MOVE_B(b)))
 #define COL_SET_A(color, a) (color = (COL_TRUNC_A(color) | COL_MOVE_A(a)))
 
-#define COL_CREATE_RGBA(r,g,b,a) ((color_t) COL_MOVE_ALL(r,g,b,a))
+#define COL_CREATE_RGBA(r,g,b,a) ((Color) COL_MOVE_ALL(r,g,b,a))
 
-typedef unsigned long int color_t;
+typedef unsigned long int Color;
 
 typedef struct {
 	float r, g, b;
-} cRGB_t;
+} ColorRGB;
 
 #if 0
 	/**
 		Creates new color object
 	*/
 #endif
-cRGB_t * create_crgb( const float r, const float g, const float b);
+ColorRGB * create_crgb( const float r, const float g, const float b);
 #if 0
 	/**
 		copy values from color2 into color.
 	*/
 #endif
-void crgb_crgb_copy(cRGB_t *  color, const cRGB_t *  color2);
-void crgb_crgb_set(cRGB_t *  color, const float r, const float g, const float b);
-void crgb_crgb_set_ptr(cRGB_t *  color, const float *r, const float *g, const float *b);
+void crgb_crgb_copy(ColorRGB *  color, const ColorRGB *  color2);
+void crgb_crgb_set(ColorRGB *  color, const float r, const float g, const float b);
+void crgb_crgb_set_ptr(ColorRGB *  color, const float *r, const float *g, const float *b);
 
 
 #if 0
@@ -78,42 +78,42 @@ void crgb_crgb_set_ptr(cRGB_t *  color, const float *r, const float *g, const fl
 		Add two colors and store result in color.
 	*/
 #endif
-void crgb_crgb_add(cRGB_t *  color, const cRGB_t *  color2);
-//no need for color_t its only color1 += color2
+void crgb_crgb_add(ColorRGB *  color, const ColorRGB *  color2);
+//no need for Color its only color1 += color2
 
 #if 0
 	/**
 		Add color value to each value of rgba. If you want to sub then add negative number
 	*/
 #endif
-void crgb_add(cRGB_t *  color, const float add);
-void color_add(color_t *  color, const int add);
-void color_add_dest(color_t *  dest, const color_t *  color, const int add);
+void crgb_add(ColorRGB *  color, const float add);
+void color_add(Color *  color, const int add);
+void color_add_dest(Color *  dest, const Color *  color, const int add);
 #if 0
 	/**
 		Multiplies color value to each value of rgba. If you want to divife then multiply antivalent number
 	*/
 #endif
-void crgb_mul(cRGB_t *  color, const float mul);
-void color_mul(color_t *  color, const int mul);
-void color_mul_dest(color_t *  dest, const color_t *  color, const int mul);
-void color_mulf(color_t *  color, const float mul);
-void color_mulf_dest(color_t *  dest, const color_t *  color, const float mul);
+void crgb_mul(ColorRGB *  color, const float mul);
+void color_mul(Color *  color, const int mul);
+void color_mul_dest(Color *  dest, const Color *  color, const int mul);
+void color_mulf(Color *  color, const float mul);
+void color_mulf_dest(Color *  dest, const Color *  color, const float mul);
 #if 0
 	/**
 		prints color value
 	*/
 #endif
-void crgb_print(const cRGB_t *  color);
-void color_print(const color_t *  color);
+void crgb_print(const ColorRGB *  color);
+void color_print(const Color *  color);
 
 #if 0
 	/**
 		calculates color with new brightness for color range 0 to 255. Result is stored in dest.
 	*/
 #endif
-void crgb_brightness_255_dest(cRGB_t *  dest, const cRGB_t *  color, const float brightness);
-void color_brightness_255_dest(/** cRGB_t*/color_t *  dest, /** cRGB_t*/const color_t *  color, const int brightness);
+void crgb_brightness_255_dest(ColorRGB *  dest, const ColorRGB *  color, const float brightness);
+void color_brightness_255_dest(/** ColorRGB*/Color *  dest, /** ColorRGB*/const Color *  color, const int brightness);
 
 #if 0
 	/**
@@ -128,7 +128,7 @@ float color_contrast_factor_255(const int contrast);
 		calculates color with new contrast for color range 0 to 255. Result is stored in dest.
 	*/
 #endif
-void crgb_contrast_255_dest(cRGB_t *  dest, const cRGB_t *  color, const float contrast_factor);
-void color_contrast_255_dest(/** cRGB_t*/color_t * dest, /** cRGB_t*/const color_t * color, const float contrast_factor);
+void crgb_contrast_255_dest(ColorRGB *  dest, const ColorRGB *  color, const float contrast_factor);
+void color_contrast_255_dest(/** ColorRGB*/Color * dest, /** ColorRGB*/const Color * color, const float contrast_factor);
 
 #endif

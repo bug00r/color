@@ -12,9 +12,9 @@
 int 
 main() {
 	#ifdef debug
-		printf("Start testing color_t lib:\n");
+		printf("Start testing Color lib:\n");
 	
-		color_t color = COL_CREATE_RGBA(255,255,255,255);
+		Color color = COL_CREATE_RGBA(255,255,255,255);
 		color_print(&color);
 		
 		color = COL_CREATE_RGBA(0,0,0,0);
@@ -29,7 +29,7 @@ main() {
 		printf("col1 + 8: ");
 		color_print(&color);
 		
-		color_t color2 = COL_CREATE_RGBA(0,0,0,0);
+		Color color2 = COL_CREATE_RGBA(0,0,0,0);
 		color_add_dest(&color2,&color, 10);
 		printf("col2: col1 + 10: ");
 		color_print(&color2);
@@ -51,8 +51,8 @@ main() {
 		printf("col2 / 2: ");
 		color_print(&color2);
 		
-		color_t color3 = COL_CREATE_RGBA(0,0,0,0);
-		color_t color4 = COL_CREATE_RGBA(0,0,0,0);
+		Color color3 = COL_CREATE_RGBA(0,0,0,0);
+		Color color4 = COL_CREATE_RGBA(0,0,0,0);
 		int twof = 2.f;
 		float half = .5f;
 		for(unsigned int r = 0; r < 255; r++){
@@ -72,7 +72,7 @@ main() {
 			}
 		}
 		
-		printf("End testing color_t lib:\n");
+		printf("End testing Color lib:\n");
 	#endif
 	return 0;
 }
